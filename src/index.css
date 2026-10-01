@@ -1,0 +1,176 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-signal: var(--signal);
+
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --line: rgb(9 9 11 / 0.08);
+  --line-strong: rgb(9 9 11 / 0.15);
+  --fg: #09090b;
+  --muted: #52525b;
+  --subtle: #71717a;
+  --accent: #3e5bd8;
+  --accent-fg: #ffffff;
+  --signal: #16a34a;
+  --glow: rgb(62 91 216 / 0.1);
+  --grid: rgb(9 9 11 / 0.045);
+  --code-key: #3e5bd8;
+  --code-str: #0f7b55;
+  --code-kw: #a3368f;
+  --code-fn: #b45309;
+  --code-com: #8a8a93;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #09090b;
+  --surface: #0f0f12;
+  --surface-2: #16161a;
+  --line: rgb(255 255 255 / 0.075);
+  --line-strong: rgb(255 255 255 / 0.14);
+  --fg: #ededef;
+  --muted: #a1a1aa;
+  --subtle: #71717a;
+  --accent: #8fa3ff;
+  --accent-fg: #09090b;
+  --signal: #4ade80;
+  --glow: rgb(143 163 255 / 0.12);
+  --grid: rgb(255 255 255 / 0.035);
+  --code-key: #9db0ff;
+  --code-str: #86d6a8;
+  --code-kw: #e29ad6;
+  --code-fn: #f0c27b;
+  --code-com: #6b6b75;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    overflow-x: clip;
+    font-feature-settings: 'ss01', 'cv11';
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--accent) 30%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  section[id] {
+    scroll-margin-top: 4.5rem;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-md border border-line bg-surface-2/60 px-2.5 py-1 font-mono text-[0.72rem] leading-none text-muted;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .hero-glow {
+    background: radial-gradient(60% 55% at 50% 0%, var(--glow), transparent 70%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(100deg, var(--fg) 10%, var(--accent) 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .gradient-border {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      140deg,
+      color-mix(in oklab, var(--accent) 55%, transparent),
+      var(--line) 35%,
+      var(--line) 65%,
+      color-mix(in oklab, var(--accent) 35%, transparent)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .tok-key {
+    color: var(--code-key);
+  }
+  .tok-str {
+    color: var(--code-str);
+  }
+  .tok-kw {
+    color: var(--code-kw);
+  }
+  .tok-fn {
+    color: var(--code-fn);
+  }
+  .tok-com {
+    color: var(--code-com);
+  }
+}
